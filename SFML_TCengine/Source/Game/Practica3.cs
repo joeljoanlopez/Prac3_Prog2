@@ -8,6 +8,7 @@ namespace TCGame
     {
         public void Init(RenderWindow i_window)
         {
+            CreateBackground();
             CreateMainCharacter();
             CreateObjectSpawner();
             CreateHUD();
@@ -21,30 +22,27 @@ namespace TCGame
         {
         }
 
+        private void CreateBackground(){
+            Actor _Background = new Actor("Background");
+            SpriteComponent _SpriteComponent = _Background.AddComponent<SpriteComponent>("Data/Textures/Fondo.jpg");
+            _SpriteComponent.Sprite.Scale = new Vector2f(1.5f, 1.5f);
+            TecnoCampusEngine.Get.Scene.AddActor(_Background);
+        }
+
         private void CreateMainCharacter()
         {
-            Actor actor = new Actor("Following Mouse Actor");
+            Actor actor = new Actor("Flamenco Rabbit");
 
             // Create an arrow shape using a ConvexShape
-            ConvexShape shape = new ConvexShape(4);
-            shape.SetPoint(0, new Vector2f(20.0f, 0.0f));
-            shape.SetPoint(1, new Vector2f(40.0f, 40.0f));
-            shape.SetPoint(2, new Vector2f(20.0f, 20.0f));
-            shape.SetPoint(3, new Vector2f(0.0f, 40.0f));
-            shape.FillColor = Color.Transparent;
-            shape.OutlineColor = Color.Green;
-            shape.OutlineThickness = 2.0f;
-            actor.AddComponent<ShapeComponent>(shape);
+            SpriteComponent _SpriteComponent = actor.AddComponent<SpriteComponent>("Data/Textures/Conejo flamenco.png");
+            _SpriteComponent.Sprite.Scale = new Vector2f(0.25f, 0.25f);
+            BoxCollisionComponent _BoxColComponent = actor.AddComponent<BoxCollisionComponent>(_SpriteComponent.GetGlobalbounds(), ECollisionLayers.Player);
+            _BoxColComponent.DebugDraw();
+
 
             // Add the transform component and set its position correctly
             TransformComponent transformComponent = actor.AddComponent<TransformComponent>();
-            transformComponent.Transform.Position = new Vector2f(600.0f, 200.0f);
-
-            
-            
-           
-
-            //////////////////////////////////////////////////
+            transformComponent.Transform.Position = new Vector2f(TecnoCampusEngine.WINDOW_WIDTH, TecnoCampusEngine.WINDOW_HEIGHT)/2;
 
             // Add the actor to the scene
             TecnoCampusEngine.Get.Scene.AddActor(actor);
