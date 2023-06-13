@@ -31,25 +31,25 @@ namespace TCGame
 
         private void CreateMainCharacter()
         {
+            // Main Character creation
             Actor actor = new Actor("Flamenco Rabbit");
 
-            // Create an arrow shape using a ConvexShape
             SpriteComponent _SpriteComponent = actor.AddComponent<SpriteComponent>("Data/Textures/Conejo flamenco.png");
             _SpriteComponent.Sprite.Scale = new Vector2f(0.25f, 0.25f);
             BoxCollisionComponent _BoxColComponent = actor.AddComponent<BoxCollisionComponent>(_SpriteComponent.GetGlobalbounds(), ECollisionLayers.Player);
-            _BoxColComponent.DebugDraw();
 
-
-            // Add the transform component and set its position correctly
             TransformComponent transformComponent = actor.AddComponent<TransformComponent>();
             transformComponent.Transform.Position = new Vector2f(TecnoCampusEngine.WINDOW_WIDTH, TecnoCampusEngine.WINDOW_HEIGHT)/2;
 
-            // Add the actor to the scene
+            PlayerMovementController _PlayerMovementController = actor.AddComponent<PlayerMovementController>();
+
             TecnoCampusEngine.Get.Scene.AddActor(actor);
         }
 
         private void CreateObjectSpawner()
         {
+
+            // Create a spawner
             Actor actor = new Actor("Spawner");
             ActorSpawnerComponent<ActorPrefab>  spawner = actor.AddComponent(new ActorSpawnerComponent<ActorPrefab>());
             spawner.m_MaxPosition = TecnoCampusEngine.Get.ViewportSize;
