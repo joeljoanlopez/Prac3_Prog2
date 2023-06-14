@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using System.Collections.Generic;
+using SFML.Graphics;
 using SFML.System;
 using TCEngine;
 
@@ -6,6 +7,8 @@ namespace TCGame
 {
     class Practica3 : Game
     {
+        static float MC_SCALE = 2.5f;
+
         public void Init(RenderWindow i_window)
         {
             CreateBackground();
@@ -22,7 +25,8 @@ namespace TCGame
         {
         }
 
-        private void CreateBackground(){
+        private void CreateBackground()
+        {
             Actor _Background = new Actor("Background");
             SpriteComponent _SpriteComponent = _Background.AddComponent<SpriteComponent>("Data/Textures/Fondo.jpg");
             _SpriteComponent.Sprite.Scale = new Vector2f(1.5f, 1.5f);
@@ -34,14 +38,13 @@ namespace TCGame
             // Main Character creation
             Actor actor = new Actor("Flamenco Rabbit");
 
-            SpriteComponent _SpriteComponent = actor.AddComponent<SpriteComponent>("Data/Textures/Conejo flamenco.png");
-            _SpriteComponent.Sprite.Scale = new Vector2f(0.25f, 0.25f);
-            BoxCollisionComponent _BoxColComponent = actor.AddComponent<BoxCollisionComponent>(_SpriteComponent.GetGlobalbounds(), ECollisionLayers.Player);
-
-            
+            AnimatedSpriteComponent _IdleAnimation = actor.AddComponent<AnimatedSpriteComponent>("Data/Textures/ProtaIdle.png", 3, 1);
+            _IdleAnimation.sprite.Scale = _IdleAnimation.sprite.Scale * MC_SCALE;
+            BoxCollisionComponent _BoxColComponent = actor.AddComponent<BoxCollisionComponent>(_IdleAnimation.GetGlobalBounds(), ECollisionLayers.Player);
+            _BoxColComponent.DebugDraw();
 
             TransformComponent transformComponent = actor.AddComponent<TransformComponent>();
-            transformComponent.Transform.Position = new Vector2f(TecnoCampusEngine.WINDOW_WIDTH, TecnoCampusEngine.WINDOW_HEIGHT)/2;
+            transformComponent.Transform.Position = new Vector2f(TecnoCampusEngine.WINDOW_WIDTH, TecnoCampusEngine.WINDOW_HEIGHT) / 2;
 
             PlayerMovementController _PlayerMovementController = actor.AddComponent<PlayerMovementController>();
 
@@ -53,24 +56,33 @@ namespace TCGame
 
             // Create a spawner
             Actor actor = new Actor("Spawner");
-            ActorSpawnerComponent<ActorPrefab>  spawner = actor.AddComponent(new ActorSpawnerComponent<ActorPrefab>());
+            ActorSpawnerComponent<ActorPrefab> spawner = actor.AddComponent(new ActorSpawnerComponent<ActorPrefab>());
             spawner.m_MaxPosition = TecnoCampusEngine.Get.ViewportSize;
             spawner.m_MinPosition = new Vector2f(0.0f, 0.0f);
-            spawner.m_MaxTime = 3.0f;
-            spawner.m_MinTime = 0.2f;
-            ActorPrefab enemy = new ActorPrefab("enemy");
+            spawner.m_MaxTime = 6.0f;
+            spawner.m_MinTime = 3.0f;
 
+            List<ECollisionLayers> enemyLayers = new List<ECollisionLayers>();
+            enemyLayers.Add(ECollisionLayers.Person);
+
+
+            // Create Enemies
+            // TODO Add Necessary components
+            ActorPrefab enemy1 = new ActorPrefab("enemy1");
+            AnimatedSpriteComponent _AnimatedComponent1 = enemy1.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo1.png", 22, 4); 
+            _AnimatedComponent1.frameTime = 0.001f;
+            TransformComponent _TransformComponent1 = enemy1.AddComponent<TransformComponent>();
             
-            CircleShape shape = new CircleShape(20);
-            shape.OutlineColor = Color.Magenta;
-            shape.FillColor = Color.Transparent;
-            shape.OutlineThickness = 2.0f;
-            
-            enemy.AddComponent<ShapeComponent>(shape);
-            enemy.AddComponent<TransformComponent>();
+            ActorPrefab enemy2 = new ActorPrefab("enemy2");
+            AnimatedSpriteComponent _AnimatedComponent2 = enemy2.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo2.png", 18, 5); 
+            _AnimatedComponent2.frameTime = 0.001f;
+            TransformComponent _TransformComponent2 = enemy2.AddComponent<TransformComponent>();
             
 
-            spawner.AddActorPrefab(enemy);
+
+
+            spawner.AddActorPrefab(enemy1);
+            spawner.AddActorPrefab(enemy2);
             // Add the actor to the scene
             TecnoCampusEngine.Get.Scene.AddActor(actor);
         }
@@ -85,7 +97,7 @@ namespace TCGame
             actor.AddComponent<HUDComponent>("Puntos");
 
             // Something is missing here!!!
-            
+
             TecnoCampusEngine.Get.Scene.AddActor(actor);
 
 
