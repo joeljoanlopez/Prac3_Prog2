@@ -28,8 +28,8 @@ namespace TCGame
         private void CreateBackground()
         {
             Actor _Background = new Actor("Background");
-            SpriteComponent _SpriteComponent = _Background.AddComponent<SpriteComponent>("Data/Textures/Fondo.jpg");
-            _SpriteComponent.Sprite.Scale = new Vector2f(1.5f, 1.5f);
+            //SpriteComponent _SpriteComponent = _Background.AddComponent<SpriteComponent>("Data/Textures/Fondo.jpg");
+            //_SpriteComponent.Sprite.Scale = new Vector2f(1.5f, 1.5f);
             TecnoCampusEngine.Get.Scene.AddActor(_Background);
         }
 
