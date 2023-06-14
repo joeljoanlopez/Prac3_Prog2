@@ -38,6 +38,8 @@ namespace TCGame
             _SpriteComponent.Sprite.Scale = new Vector2f(0.25f, 0.25f);
             BoxCollisionComponent _BoxColComponent = actor.AddComponent<BoxCollisionComponent>(_SpriteComponent.GetGlobalbounds(), ECollisionLayers.Player);
 
+            
+
             TransformComponent transformComponent = actor.AddComponent<TransformComponent>();
             transformComponent.Transform.Position = new Vector2f(TecnoCampusEngine.WINDOW_WIDTH, TecnoCampusEngine.WINDOW_HEIGHT)/2;
 
