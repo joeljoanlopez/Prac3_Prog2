@@ -5,9 +5,10 @@ using TCEngine;
 
 namespace TCGame
 {
-    class Practica3 : Game
+    internal class Practica3 : Game
     {
-        static float MC_SCALE = 2.5f;
+        private static float MC_SCALE = 2.5f;
+        private static float ENEMY_SCALE = 2.5f;
 
         public void Init(RenderWindow i_window)
         {
@@ -28,8 +29,9 @@ namespace TCGame
         private void CreateBackground()
         {
             Actor _Background = new Actor("Background");
-            //SpriteComponent _SpriteComponent = _Background.AddComponent<SpriteComponent>("Data/Textures/Fondo.jpg");
-            //_SpriteComponent.Sprite.Scale = new Vector2f(1.5f, 1.5f);
+            Texture _mcTexture = new Texture("Data/Textures/Fondo.png");
+            SpriteComponent _SpriteComponent = _Background.AddComponent<SpriteComponent>(_mcTexture);
+            _SpriteComponent.Sprite.Scale = new Vector2f(1.5f, 1.5f);
             TecnoCampusEngine.Get.Scene.AddActor(_Background);
         }
 
@@ -38,8 +40,8 @@ namespace TCGame
             // Main Character creation
             Actor actor = new Actor("Flamenco Rabbit");
 
-            AnimatedSpriteComponent _IdleAnimation = actor.AddComponent<AnimatedSpriteComponent>("Data/Textures/ProtaIdle.png", 3, 1);
-            _IdleAnimation.sprite.Scale = _IdleAnimation.sprite.Scale * MC_SCALE;
+            AnimatedSpriteComponent _IdleAnimation = actor.AddComponent<AnimatedSpriteComponent>("Data/Textures/ProtaIdle.png", 3u, 1u);
+            _IdleAnimation.sprite.Scale *= MC_SCALE;
             BoxCollisionComponent _BoxColComponent = actor.AddComponent<BoxCollisionComponent>(_IdleAnimation.GetGlobalBounds(), ECollisionLayers.Player);
             _BoxColComponent.DebugDraw();
 
@@ -53,7 +55,6 @@ namespace TCGame
 
         private void CreateObjectSpawner()
         {
-
             // Create a spawner
             Actor actor = new Actor("Spawner");
             ActorSpawnerComponent<ActorPrefab> spawner = actor.AddComponent(new ActorSpawnerComponent<ActorPrefab>());
@@ -65,21 +66,20 @@ namespace TCGame
             List<ECollisionLayers> enemyLayers = new List<ECollisionLayers>();
             enemyLayers.Add(ECollisionLayers.Person);
 
-
             // Create Enemies
+            // EJEMPLO 
             // TODO Add Necessary components
             ActorPrefab enemy1 = new ActorPrefab("enemy1");
-            AnimatedSpriteComponent _AnimatedComponent1 = enemy1.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo1.png", 22, 4); 
+            AnimatedSpriteComponent _AnimatedComponent1 = enemy1.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo1.png", 22u, 4u);
             _AnimatedComponent1.frameTime = 0.001f;
+            _AnimatedComponent1.sprite.Scale *= ENEMY_SCALE; 
             TransformComponent _TransformComponent1 = enemy1.AddComponent<TransformComponent>();
-            
+
             ActorPrefab enemy2 = new ActorPrefab("enemy2");
-            AnimatedSpriteComponent _AnimatedComponent2 = enemy2.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo2.png", 18, 5); 
+            AnimatedSpriteComponent _AnimatedComponent2 = enemy2.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo2.png", 18u, 5u);
             _AnimatedComponent2.frameTime = 0.001f;
+            _AnimatedComponent2.sprite.Scale *= ENEMY_SCALE; 
             TransformComponent _TransformComponent2 = enemy2.AddComponent<TransformComponent>();
-            
-
-
 
             spawner.AddActorPrefab(enemy1);
             spawner.AddActorPrefab(enemy2);
@@ -100,9 +100,7 @@ namespace TCGame
 
             TecnoCampusEngine.Get.Scene.AddActor(actor);
 
-
             //////////////////////////////////////
         }
-
     }
 }
