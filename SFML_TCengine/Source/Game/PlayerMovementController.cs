@@ -47,6 +47,7 @@ namespace TCGame
                 m_sprite.sprite.Scale = new Vector2f(Math.Abs(m_sprite.sprite.Scale.X), m_sprite.sprite.Scale.Y);
             }
             movement = Normalize(movement);
+
             Vector2f displacement = movement * MOVEMENT_SPEED * _dt;
             TransformComponent transformComponent = Owner.GetComponent<TransformComponent>();
             Debug.Assert(transformComponent != null);
