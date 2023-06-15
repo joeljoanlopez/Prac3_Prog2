@@ -45,18 +45,25 @@ namespace TCGame
             // EJEMPLOS 1, 2 y 10
             AnimatedSpriteComponent _IdleAnimation = actor.AddComponent<AnimatedSpriteComponent>("Data/Textures/ProtaIdle.png", 3u, 1u);
             _IdleAnimation.sprite.Scale *= MC_SCALE;
+            TransformComponent transformComponent = actor.AddComponent<TransformComponent>();
+            transformComponent.Transform.Position = new Vector2f(500.0f, 300.0f);
+            // _IdleAnimation.sprite.Origin = new Vector2f(_IdleAnimation.sprite.GetLocalBounds().Width / 2, _IdleAnimation.sprite.GetLocalBounds().Height / 2);
+            _IdleAnimation.Center();
+
             BoxCollisionComponent _BoxColComponent = actor.AddComponent<BoxCollisionComponent>(_IdleAnimation.GetGlobalBounds(), ECollisionLayers.Player);
             _BoxColComponent.DebugDraw();
 
-            TransformComponent transformComponent = actor.AddComponent<TransformComponent>();
-            transformComponent.Transform.Position = new Vector2f(TecnoCampusEngine.WINDOW_WIDTH, TecnoCampusEngine.WINDOW_HEIGHT) / 2;
 
             List<ECollisionLayers> enemyLayers = new List<ECollisionLayers>();
             enemyLayers.Add(ECollisionLayers.Enemy);
 
             PlayerMovementController _PlayerMovementController = actor.AddComponent<PlayerMovementController>();
 
-            ShootComponent shootComponent = actor.AddComponent<ShootComponent>(SHOOTING_COOLDOWN, enemyLayers, "Data/Textures/bulletPlaceHolder.png");
+            // ShootComponent shootComponent = actor.AddComponent<ShootComponent>(SHOOTING_COOLDOWN, enemyLayers, "Data/Textures/bulletPlaceHolder.png");
+            CannonComponent _cannonComponent = actor.AddComponent<CannonComponent>(enemyLayers);
+            _cannonComponent.AutomaticFire = true;
+            _cannonComponent.BulletTextureName = "Data/Textures/bulletPlaceHolder.png";
+            _cannonComponent.FireRate = 1.5f;
 
             TecnoCampusEngine.Get.Scene.AddActor(actor);
         }
