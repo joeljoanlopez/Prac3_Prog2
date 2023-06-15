@@ -125,5 +125,9 @@ namespace TCEngine
         {
             return m_Sprite.GetGlobalBounds();
         }
+
+        public void ChangeAnim(string texturePath, uint cols, uint rows){
+            m_Sprite = new AnimatedSprite(new Texture(texturePath), rows, cols, 0.2f);
+        }
     }
 }

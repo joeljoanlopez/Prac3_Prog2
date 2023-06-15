@@ -1,3 +1,4 @@
+using System.Numerics;
 using System;
 using System.Diagnostics;
 using SFML.System;
@@ -9,6 +10,12 @@ namespace TCGame
     public class PlayerMovementController : BaseComponent
     {
         private const float MOVEMENT_SPEED = 200f;
+        Vector2f movement;
+
+        public PlayerMovementController()
+        {
+            movement = new Vector2f();
+        }
         public override EComponentUpdateCategory GetUpdateCategory()
         {
             return EComponentUpdateCategory.PreUpdate;
@@ -16,9 +23,9 @@ namespace TCGame
 
         public override void Update(float _dt)
         {
-            Vector2f movement = new Vector2f();
+
             AnimatedSpriteComponent m_sprite = Owner.GetComponent<AnimatedSpriteComponent>();
-            
+            movement = new Vector2f(0,0);
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.W) || Keyboard.IsKeyPressed(Keyboard.Key.Up))
             {
@@ -31,13 +38,13 @@ namespace TCGame
             if (Keyboard.IsKeyPressed(Keyboard.Key.A) || Keyboard.IsKeyPressed(Keyboard.Key.Left))
             {
                 movement.X -= 1f;
-                m_sprite.sprite.Scale = new Vector2f (-Math.Abs(m_sprite.sprite.Scale.X), m_sprite.sprite.Scale.Y);
+                m_sprite.sprite.Scale = new Vector2f(-Math.Abs(m_sprite.sprite.Scale.X), m_sprite.sprite.Scale.Y);
 
             }
             if (Keyboard.IsKeyPressed(Keyboard.Key.D) || Keyboard.IsKeyPressed(Keyboard.Key.Right))
             {
                 movement.X += 1f;
-                m_sprite.sprite.Scale = new Vector2f (Math.Abs(m_sprite.sprite.Scale.X), m_sprite.sprite.Scale.Y);
+                m_sprite.sprite.Scale = new Vector2f(Math.Abs(m_sprite.sprite.Scale.X), m_sprite.sprite.Scale.Y);
             }
             movement = Normalize(movement);
             Vector2f displacement = movement * MOVEMENT_SPEED * _dt;
@@ -51,6 +58,11 @@ namespace TCGame
         {
             float _module = (float)Math.Sqrt(Math.Pow(vec.X, 2) + Math.Pow(vec.Y, 2));
             return _module != 0 ? vec / _module : vec;
+        }
+
+        public bool Moving()
+        {
+            return Math.Abs(movement.X) > 0.1 || Math.Abs(movement.Y) > 0.1;
         }
 
     }

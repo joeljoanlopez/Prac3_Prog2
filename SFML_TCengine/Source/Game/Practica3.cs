@@ -43,15 +43,13 @@ namespace TCGame
             Actor actor = new Actor("Flamenco Rabbit");
 
             // EJEMPLOS 1, 2 y 10
-            AnimatedSpriteComponent _IdleAnimation = actor.AddComponent<AnimatedSpriteComponent>("Data/Textures/ProtaIdle.png", 3u, 1u);
-            _IdleAnimation.sprite.Scale *= MC_SCALE;
             TransformComponent transformComponent = actor.AddComponent<TransformComponent>();
             transformComponent.Transform.Position = new Vector2f(500.0f, 300.0f);
-            // _IdleAnimation.sprite.Origin = new Vector2f(_IdleAnimation.sprite.GetLocalBounds().Width / 2, _IdleAnimation.sprite.GetLocalBounds().Height / 2);
-            _IdleAnimation.Center();
-
-            BoxCollisionComponent _BoxColComponent = actor.AddComponent<BoxCollisionComponent>(_IdleAnimation.GetGlobalBounds(), ECollisionLayers.Player);
-            _BoxColComponent.DebugDraw();
+            AnimatedSpriteComponent animatedSpriteComponent = actor.AddComponent<AnimatedSpriteComponent>("Data/Textures/ProtaIdle.png", 3u, 1u);
+            animatedSpriteComponent.sprite.Scale *= MC_SCALE;
+            animatedSpriteComponent.Center();
+            AnimationFSMComponent animationFSMComponent = actor.AddComponent<AnimationFSMComponent>(MC_SCALE);
+            BoxCollisionComponent boxCollisionComponent = actor.AddComponent<BoxCollisionComponent>(animatedSpriteComponent.GetGlobalBounds(), ECollisionLayers.Player);
 
 
             List<ECollisionLayers> enemyLayers = new List<ECollisionLayers>();
@@ -63,6 +61,8 @@ namespace TCGame
             _cannonComponent.AutomaticFire = true;
             _cannonComponent.BulletTextureName = "Data/Textures/bulletPlaceHolder.png";
             _cannonComponent.FireRate = 1.5f;
+
+
 
             TecnoCampusEngine.Get.Scene.AddActor(actor);
         }
