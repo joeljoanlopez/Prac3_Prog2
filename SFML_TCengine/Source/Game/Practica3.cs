@@ -59,7 +59,6 @@ namespace TCGame
 
             PlayerMovementController _PlayerMovementController = actor.AddComponent<PlayerMovementController>();
 
-            // ShootComponent shootComponent = actor.AddComponent<ShootComponent>(SHOOTING_COOLDOWN, enemyLayers, "Data/Textures/bulletPlaceHolder.png");
             CannonComponent _cannonComponent = actor.AddComponent<CannonComponent>(enemyLayers);
             _cannonComponent.AutomaticFire = true;
             _cannonComponent.BulletTextureName = "Data/Textures/bulletPlaceHolder.png";

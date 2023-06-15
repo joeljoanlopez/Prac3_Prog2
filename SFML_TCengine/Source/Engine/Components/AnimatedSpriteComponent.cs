@@ -9,7 +9,7 @@ namespace TCEngine
     public class AnimatedSpriteComponent : RenderComponent
     {
         private AnimatedSprite m_Sprite;
-        
+
 
         public bool loop
         {
@@ -35,12 +35,13 @@ namespace TCEngine
             {
                 return m_Sprite;
             }
+            set { m_Sprite = value; }
         }
 
-        public AnimatedSpriteComponent(string _textureName, uint _numColumns, uint _numRows) 
+        public AnimatedSpriteComponent(string _textureName, uint _numColumns, uint _numRows)
         {
             m_Sprite = new AnimatedSprite(new Texture(_textureName), _numRows, _numColumns, 0.2f);
-            
+
 
             Initialize();
         }
@@ -81,7 +82,7 @@ namespace TCEngine
         public override void DebugDraw()
         {
             TransformComponent transformComponent = Owner.GetComponent<TransformComponent>();
-            if(transformComponent != null)
+            if (transformComponent != null)
             {
                 FloatRect currentFrameRect = m_Sprite.GetGlobalBounds();
                 //TecnoCampusEngine.Get.DebugManager.Box(transformComponent.Transform.Transform.TransformRect(currentFrameRect), Color.Magenta);

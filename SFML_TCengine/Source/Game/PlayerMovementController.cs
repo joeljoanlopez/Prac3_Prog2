@@ -18,6 +18,7 @@ namespace TCGame
         {
             Vector2f movement = new Vector2f();
             AnimatedSpriteComponent m_sprite = Owner.GetComponent<AnimatedSpriteComponent>();
+            
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.W) || Keyboard.IsKeyPressed(Keyboard.Key.Up))
             {
@@ -30,13 +31,13 @@ namespace TCGame
             if (Keyboard.IsKeyPressed(Keyboard.Key.A) || Keyboard.IsKeyPressed(Keyboard.Key.Left))
             {
                 movement.X -= 1f;
-                //m_sprite.sprite.Scale = new Vector2f(-1f,1f);
+                m_sprite.sprite.Scale = new Vector2f (-Math.Abs(m_sprite.sprite.Scale.X), m_sprite.sprite.Scale.Y);
 
             }
             if (Keyboard.IsKeyPressed(Keyboard.Key.D) || Keyboard.IsKeyPressed(Keyboard.Key.Right))
             {
                 movement.X += 1f;
-                //m_sprite.sprite.Scale = new Vector2f(1f,1f);
+                m_sprite.sprite.Scale = new Vector2f (Math.Abs(m_sprite.sprite.Scale.X), m_sprite.sprite.Scale.Y);
             }
             movement = Normalize(movement);
             Vector2f displacement = movement * MOVEMENT_SPEED * _dt;
