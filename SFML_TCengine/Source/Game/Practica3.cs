@@ -40,6 +40,7 @@ namespace TCGame
             // Main Character creation
             Actor actor = new Actor("Flamenco Rabbit");
 
+            // EJEMPLOS 1, 2 y 10
             AnimatedSpriteComponent _IdleAnimation = actor.AddComponent<AnimatedSpriteComponent>("Data/Textures/ProtaIdle.png", 3u, 1u);
             _IdleAnimation.sprite.Scale *= MC_SCALE;
             BoxCollisionComponent _BoxColComponent = actor.AddComponent<BoxCollisionComponent>(_IdleAnimation.GetGlobalBounds(), ECollisionLayers.Player);
@@ -55,6 +56,9 @@ namespace TCGame
 
         private void CreateObjectSpawner()
         {
+            // Create Enemies
+            // EJEMPLO 8
+            
             // Create a spawner
             Actor actor = new Actor("Spawner");
             ActorSpawnerComponent<ActorPrefab> spawner = actor.AddComponent(new ActorSpawnerComponent<ActorPrefab>());
@@ -66,20 +70,21 @@ namespace TCGame
             List<ECollisionLayers> enemyLayers = new List<ECollisionLayers>();
             enemyLayers.Add(ECollisionLayers.Person);
 
-            // Create Enemies
-            // EJEMPLO 
             // TODO Add Necessary components
+            // EJEMPLOS 1, 2 y 10
             ActorPrefab enemy1 = new ActorPrefab("enemy1");
             AnimatedSpriteComponent _AnimatedComponent1 = enemy1.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo1.png", 22u, 4u);
             _AnimatedComponent1.frameTime = 0.001f;
             _AnimatedComponent1.sprite.Scale *= ENEMY_SCALE; 
             TransformComponent _TransformComponent1 = enemy1.AddComponent<TransformComponent>();
+            BoxCollisionComponent _BoxColComponent1 = enemy1.AddComponent<BoxCollisionComponent>(_AnimatedComponent1.GetGlobalBounds(), ECollisionLayers.Enemy);
 
             ActorPrefab enemy2 = new ActorPrefab("enemy2");
             AnimatedSpriteComponent _AnimatedComponent2 = enemy2.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo2.png", 18u, 5u);
             _AnimatedComponent2.frameTime = 0.001f;
             _AnimatedComponent2.sprite.Scale *= ENEMY_SCALE; 
             TransformComponent _TransformComponent2 = enemy2.AddComponent<TransformComponent>();
+            BoxCollisionComponent _BoxColComponent2 = enemy2.AddComponent<BoxCollisionComponent>(_AnimatedComponent2.GetGlobalBounds(), ECollisionLayers.Enemy);
 
             spawner.AddActorPrefab(enemy1);
             spawner.AddActorPrefab(enemy2);
