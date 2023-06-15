@@ -17,7 +17,7 @@ namespace TCGame
         public override void Update(float _dt)
         {
             Vector2f movement = new Vector2f();
-            AnimatedSpriteComponent m_sprite = Owner.AddComponent<AnimatedSpriteComponent>();
+            AnimatedSpriteComponent m_sprite = Owner.GetComponent<AnimatedSpriteComponent>();
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.W) || Keyboard.IsKeyPressed(Keyboard.Key.Up))
             {
