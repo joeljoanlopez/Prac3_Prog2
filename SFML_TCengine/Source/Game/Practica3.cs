@@ -10,6 +10,8 @@ namespace TCGame
         private static float MC_SCALE = 2.5f;
         private static float ENEMY_SCALE = 2.5f;
 
+        static float SHOOTING_COOLDOWN = 2.0f;
+
         public void Init(RenderWindow i_window)
         {
             CreateBackground();
@@ -29,9 +31,9 @@ namespace TCGame
         private void CreateBackground()
         {
             Actor _Background = new Actor("Background");
-            Texture _mcTexture = new Texture("Data/Textures/Fondo.png");
+            Texture _mcTexture = new Texture("Data/Textures/Fondo.jpg");
             SpriteComponent _SpriteComponent = _Background.AddComponent<SpriteComponent>(_mcTexture);
-            _SpriteComponent.Sprite.Scale = new Vector2f(1.5f, 1.5f);
+            _SpriteComponent.Sprite.Scale *= 1.5f;
             TecnoCampusEngine.Get.Scene.AddActor(_Background);
         }
 
@@ -49,7 +51,12 @@ namespace TCGame
             TransformComponent transformComponent = actor.AddComponent<TransformComponent>();
             transformComponent.Transform.Position = new Vector2f(TecnoCampusEngine.WINDOW_WIDTH, TecnoCampusEngine.WINDOW_HEIGHT) / 2;
 
+            List<ECollisionLayers> enemyLayers = new List<ECollisionLayers>();
+            enemyLayers.Add(ECollisionLayers.Enemy);
+
             PlayerMovementController _PlayerMovementController = actor.AddComponent<PlayerMovementController>();
+
+            ShootComponent shootComponent = actor.AddComponent<ShootComponent>(SHOOTING_COOLDOWN, enemyLayers, "Data/Textures/bulletPlaceHolder.png");
 
             TecnoCampusEngine.Get.Scene.AddActor(actor);
         }
@@ -58,7 +65,7 @@ namespace TCGame
         {
             // Create Enemies
             // EJEMPLO 8
-            
+
             // Create a spawner
             Actor actor = new Actor("Spawner");
             ActorSpawnerComponent<ActorPrefab> spawner = actor.AddComponent(new ActorSpawnerComponent<ActorPrefab>());
@@ -75,14 +82,14 @@ namespace TCGame
             ActorPrefab enemy1 = new ActorPrefab("enemy1");
             AnimatedSpriteComponent _AnimatedComponent1 = enemy1.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo1.png", 22u, 4u);
             _AnimatedComponent1.frameTime = 0.001f;
-            _AnimatedComponent1.sprite.Scale *= ENEMY_SCALE; 
+            _AnimatedComponent1.sprite.Scale *= ENEMY_SCALE;
             TransformComponent _TransformComponent1 = enemy1.AddComponent<TransformComponent>();
             BoxCollisionComponent _BoxColComponent1 = enemy1.AddComponent<BoxCollisionComponent>(_AnimatedComponent1.GetGlobalBounds(), ECollisionLayers.Enemy);
 
             ActorPrefab enemy2 = new ActorPrefab("enemy2");
             AnimatedSpriteComponent _AnimatedComponent2 = enemy2.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo2.png", 18u, 5u);
             _AnimatedComponent2.frameTime = 0.001f;
-            _AnimatedComponent2.sprite.Scale *= ENEMY_SCALE; 
+            _AnimatedComponent2.sprite.Scale *= ENEMY_SCALE;
             TransformComponent _TransformComponent2 = enemy2.AddComponent<TransformComponent>();
             BoxCollisionComponent _BoxColComponent2 = enemy2.AddComponent<BoxCollisionComponent>(_AnimatedComponent2.GetGlobalBounds(), ECollisionLayers.Enemy);
 
