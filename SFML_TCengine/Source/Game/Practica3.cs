@@ -55,7 +55,8 @@ namespace TCGame
             List<ECollisionLayers> enemyLayers = new List<ECollisionLayers>();
             enemyLayers.Add(ECollisionLayers.Enemy);
 
-            PlayerMovementController _PlayerMovementController = actor.AddComponent<PlayerMovementController>();
+            MovementComponent _PlayerMovement = actor.AddComponent<MovementComponent>();
+            PlayerInputComponent _PlayerMovementController = actor.AddComponent<PlayerInputComponent>();
 
             CannonComponent _cannonComponent = actor.AddComponent<CannonComponent>(enemyLayers);
             _cannonComponent.AutomaticFire = true;

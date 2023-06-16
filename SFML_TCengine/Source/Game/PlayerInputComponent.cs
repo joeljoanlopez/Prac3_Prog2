@@ -7,15 +7,21 @@ using TCEngine;
 
 namespace TCGame
 {
-    public class PlayerMovementController : BaseComponent
+    public class PlayerInputComponent : BaseComponent
     {
-        private const float MOVEMENT_SPEED = 200f;
+        private const float MOVEMENT_SPEED = 50f;
+        private const float INITIAL_SPEED = 1f;
         Vector2f movement;
+        Vector2f _MousePosition;
 
-        public PlayerMovementController()
+        float _CurrentSpeed;
+
+        public PlayerInputComponent()
         {
             movement = new Vector2f();
+            _CurrentSpeed = INITIAL_SPEED;
         }
+
         public override EComponentUpdateCategory GetUpdateCategory()
         {
             return EComponentUpdateCategory.PreUpdate;
@@ -25,46 +31,36 @@ namespace TCGame
         {
 
             AnimatedSpriteComponent m_sprite = Owner.GetComponent<AnimatedSpriteComponent>();
-            movement = new Vector2f(0,0);
+            movement = new Vector2f(0, 0);
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.W) || Keyboard.IsKeyPressed(Keyboard.Key.Up))
-            {
                 movement.Y -= 1f;
-            }
             if (Keyboard.IsKeyPressed(Keyboard.Key.S) || Keyboard.IsKeyPressed(Keyboard.Key.Down))
-            {
                 movement.Y += 1f;
-            }
             if (Keyboard.IsKeyPressed(Keyboard.Key.A) || Keyboard.IsKeyPressed(Keyboard.Key.Left))
-            {
                 movement.X -= 1f;
-                m_sprite.sprite.Scale = new Vector2f(-Math.Abs(m_sprite.sprite.Scale.X), m_sprite.sprite.Scale.Y);
-
-            }
             if (Keyboard.IsKeyPressed(Keyboard.Key.D) || Keyboard.IsKeyPressed(Keyboard.Key.Right))
-            {
                 movement.X += 1f;
-                m_sprite.sprite.Scale = new Vector2f(Math.Abs(m_sprite.sprite.Scale.X), m_sprite.sprite.Scale.Y);
-            }
+
             movement = Normalize(movement);
 
-            Vector2f displacement = movement * MOVEMENT_SPEED * _dt;
-            TransformComponent transformComponent = Owner.GetComponent<TransformComponent>();
-            Debug.Assert(transformComponent != null);
-            transformComponent.Transform.Position += displacement;
+            if (movement.X < 0)
+                m_sprite.sprite.Scale = new Vector2f(-Math.Abs(m_sprite.sprite.Scale.X), m_sprite.sprite.Scale.Y);
+            else
+                m_sprite.sprite.Scale = new Vector2f(Math.Abs(m_sprite.sprite.Scale.X), m_sprite.sprite.Scale.Y);
 
+            MovementComponent movementComponent = Owner.GetComponent<MovementComponent>();
+            movementComponent.SetDirection(movement);
         }
 
         private Vector2f Normalize(Vector2f vec)
         {
-            float _module = (float)Math.Sqrt(Math.Pow(vec.X, 2) + Math.Pow(vec.Y, 2));
-            return _module != 0 ? vec / _module : vec;
+            return vec.Size() != 0 ? vec / vec.Size() : vec;
         }
 
         public bool Moving()
         {
-            return Math.Abs(movement.X) > 0.1 || Math.Abs(movement.Y) > 0.1;
+            return movement.Size() > 0.1f;
         }
-
     }
 }

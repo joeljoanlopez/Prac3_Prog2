@@ -59,14 +59,14 @@ namespace TCGame
             switch (_CurrentState)
             {
                 case AnimationState.Idle:
-                    if (Owner.GetComponent<PlayerMovementController>().Moving())
+                    if (Owner.GetComponent<PlayerInputComponent>().Moving())
                     {
                         ChangeState(AnimationState.Moving);
                     }
                     break;
                 case AnimationState.Moving:
 
-                    if (!Owner.GetComponent<PlayerMovementController>().Moving())
+                    if (!Owner.GetComponent<PlayerInputComponent>().Moving())
                     {
                         ChangeState(AnimationState.Idle);
                     }

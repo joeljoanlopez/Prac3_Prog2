@@ -13,6 +13,8 @@ namespace TCGame
 
     class ForwardMovementComponent : BaseComponent
     {
+        float _time;
+        float _vel;
         private float m_Speed;
         private Vector2f m_Forward;
         public float Speed
@@ -30,7 +32,8 @@ namespace TCGame
         {
             m_Speed = speed;
             m_Forward = fw;
-
+            _time = 0;
+            _vel = 0;
         }
 
         public override EComponentUpdateCategory GetUpdateCategory()
@@ -42,7 +45,9 @@ namespace TCGame
             TransformComponent transformComponent = Owner.GetComponent<TransformComponent>();
             if (transformComponent != null)
             {
-                transformComponent.Transform.Position += m_Forward * m_Speed * deltaTime;
+                // EJEMPLO 4
+                _vel = MathUtil.LinearInterpolation(_vel, m_Speed, 0.1f);
+                transformComponent.Transform.Position += m_Forward * _vel * deltaTime;
             }
         }
         public override object Clone()
