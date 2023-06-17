@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using SFML.Graphics;
 using SFML.System;
@@ -41,7 +42,7 @@ namespace TCGame
         private void CreateMainCharacter()
         {
             // Main Character creation
-            Actor actor = new Actor("Flamenco Rabbit");
+            Actor actor = new Actor("Player");
 
             // EJEMPLOS 1, 2 y 10
             TransformComponent transformComponent = actor.AddComponent<TransformComponent>();
@@ -91,12 +92,20 @@ namespace TCGame
 
             // Create Enemies
             int enemyNumber = 2;
+
             for (int i = 1; i <= enemyNumber; i++){
                 ActorPrefab enemy = new ActorPrefab("Enemy" + i);
                 TransformComponent _TransformComponent = enemy.AddComponent<TransformComponent>();
+            
                 AnimatedSpriteComponent _AnimatedSpriteComponent = enemy.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo" + i + ".png", 22u, 4u);
                 _AnimatedSpriteComponent.loop = false;
                 BoxCollisionComponent _BoxColComponent = enemy.AddComponent<BoxCollisionComponent>(_AnimatedSpriteComponent.GetGlobalBounds(), ECollisionLayers.Enemy);
+
+                CannonComponent _CannonComponent = enemy.AddComponent<CannonComponent>(enemyLayers, "Player");
+                _CannonComponent.AutomaticFire = true;
+                _CannonComponent.BulletTextureName = "Data/Textures/bulletPlaceHolder.png";
+                _CannonComponent.FireRate = 3f;
+                
                 TimerComponent timerComponent = enemy.AddComponent<TimerComponent>(_AnimatedSpriteComponent.animationTime);
                 timerComponent.DieOnTime = true;
                 spawner.AddActorPrefab(enemy);
@@ -104,6 +113,11 @@ namespace TCGame
             
             // Add the actor to the scene
             TecnoCampusEngine.Get.Scene.AddActor(actor);
+        }
+
+        private bool FindPlayer(Actor obj)
+        {
+            return obj.Name == "Flamenco Rabbit";
         }
 
         private void CreateHUD()

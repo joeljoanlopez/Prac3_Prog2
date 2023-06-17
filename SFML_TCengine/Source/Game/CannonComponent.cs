@@ -11,6 +11,7 @@ namespace TCGame
 {
     public class CannonComponent : BaseComponent
     {
+        private string _Target;
 
         private const float DEFAULT_FIRE_RATE = 0.3f;
         private const float DEFAULT_BULLET_SPEED = 200.0f;
@@ -109,6 +110,24 @@ namespace TCGame
             m_BulletTextureName = "Data/Textures/Bullets/PlaneBullet.png";
             TecnoCampusEngine.Get.Window.MouseMoved += OnMouseMoved;
         }
+        public CannonComponent(List<ECollisionLayers> _impactLayers, string target)
+        {
+            m_ImpactLayers = _impactLayers;
+            m_CannonDirection = new Vector2f(1.0f, 0.0f);
+            m_FireRate = DEFAULT_FIRE_RATE;
+            m_TimeToShoot = m_FireRate;
+            m_BulletTextureName = "Data/Textures/Bullets/PlaneBullet.png";
+            _Target = target;
+            TecnoCampusEngine.Get.Window.MouseMoved += OnMouseMoved;
+        }
+
+        private void GetTargetDirection(string target)
+        {
+            if (target == "Mouse")
+            {
+
+            }
+        }
 
         public override EComponentUpdateCategory GetUpdateCategory()
         {
@@ -143,7 +162,7 @@ namespace TCGame
             {
                 TransformComponent transformComponent = Owner.GetComponent<TransformComponent>();
                 Debug.Assert(transformComponent != null);
-                m_CannonDirection = _MousePosition - transformComponent.Transform.Position;
+                GetCannonDirection(transformComponent.Transform.Position);
                 m_CannonDirection = Normalize(m_CannonDirection);
 
                 for (int i = 0; i < m_BulletsPerShot; ++i)
@@ -176,6 +195,25 @@ namespace TCGame
 
                 m_TimeToShoot = m_FireRate;
             }
+        }
+
+        private void GetCannonDirection(Vector2f cannonPos)
+        {
+            Vector2f _targetPos = new Vector2f();
+
+            if (_Target == "Player"){
+                TransformComponent transformComponent = TecnoCampusEngine.Get.Scene.GetAllActors().Find(Player).GetComponent<TransformComponent>();
+                Debug.Assert(transformComponent != null);
+                _targetPos = transformComponent.Transform.Position;
+            }
+            else
+                _targetPos = _MousePosition;
+
+            m_CannonDirection = _targetPos - cannonPos;
+        }
+
+        public bool Player(Actor obj){
+            return obj.Name == "Player";
         }
 
         private Vector2f CalculateBulletSpawnPosition(Vector2f _actorPosition, int _bulletIndex)
