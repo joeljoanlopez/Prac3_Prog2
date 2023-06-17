@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Timers;
+using System.Globalization;
 using System;
 using SFML.System;
 using SFML.Window;
@@ -123,6 +124,8 @@ namespace TCGame
         {
             base.Update(_dt);
 
+
+
             if (m_AutomaticFire)
             {
                 m_TimeToShoot -= _dt;
@@ -153,16 +156,18 @@ namespace TCGame
                     {
                         spriteComponent.Sprite.Scale = new Vector2f(-1, 1);
                     }
+                    spriteComponent.Sprite.Scale *= 2;
 
+                    
                     TransformComponent missileTransformComponent = missileActor.AddComponent<TransformComponent>();
                     missileTransformComponent.Transform.Position = CalculateBulletSpawnPosition(transformComponent.Transform.Position, i);
-
-                    // TODO (3): Add the needed components
-                    // - ForwardMovementComponent
                     ForwardMovementComponent forwardMovementComponent = missileActor.AddComponent<ForwardMovementComponent>(m_BulletSpeed, m_CannonDirection);
-                    // - BulletComponent
                     BulletComponent bulletComponent = missileActor.AddComponent<BulletComponent>(m_ImpactLayers);
-                    // - OutOfWindowDestructionComponent
+                    
+                    // EJEMPLO 7
+                    // Kill the bullet on leaving screen or when 2 secs pass
+                    TimerComponent timerComponent = missileActor.AddComponent<TimerComponent>(2);
+                    timerComponent.OnTime = missileActor.Destroy;
                     OutOfWindowDestructionComponent destructionComponent = missileActor.AddComponent<OutOfWindowDestructionComponent>();
 
                     TecnoCampusEngine.Get.Scene.AddActor(missileActor);

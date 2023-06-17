@@ -45,7 +45,7 @@ namespace TCGame
             // EJEMPLOS 1, 2 y 10
             TransformComponent transformComponent = actor.AddComponent<TransformComponent>();
             transformComponent.Transform.Position = new Vector2f(500.0f, 300.0f);
-            AnimatedSpriteComponent animatedSpriteComponent = actor.AddComponent<AnimatedSpriteComponent>("Data/Textures/ProtaIdle.png", 3u, 1u);
+            AnimatedSpriteComponent animatedSpriteComponent = actor.AddComponent<AnimatedSpriteComponent>("Data/Textures/ProtaIdleV2.png", 4u, 1u);
             animatedSpriteComponent.sprite.Scale *= MC_SCALE;
             animatedSpriteComponent.Center();
             AnimationFSMComponent animationFSMComponent = actor.AddComponent<AnimationFSMComponent>(MC_SCALE);
@@ -60,7 +60,7 @@ namespace TCGame
 
             CannonComponent _cannonComponent = actor.AddComponent<CannonComponent>(enemyLayers);
             _cannonComponent.AutomaticFire = true;
-            _cannonComponent.BulletTextureName = "Data/Textures/bulletPlaceHolder.png";
+            _cannonComponent.BulletTextureName = "Data/Textures/Bullet.png";
             _cannonComponent.FireRate = 1.5f;
 
 

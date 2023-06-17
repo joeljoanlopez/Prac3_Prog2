@@ -39,8 +39,8 @@ namespace TCGame
             switch (nextState)
             {
                 case AnimationState.Idle:
-                    _TexturePath = "Data/Textures/ProtaIdle.png";
-                    _cols = 3u;
+                    _TexturePath = "Data/Textures/ProtaIdleV2.png";
+                    _cols = 4u;
                     _rows = 1u;
                     Animate();
                     break;
