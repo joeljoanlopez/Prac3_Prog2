@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Diagnostics;
+using System.Collections.Generic;
 using SFML.Graphics;
 using SFML.System;
 using TCEngine;
@@ -8,7 +9,7 @@ namespace TCGame
     internal class Practica3 : Game
     {
         private static float MC_SCALE = 2.5f;
-        private static float ENEMY_SCALE = 2.5f;
+        private static float ENEMY_SCALE = 2.0f;
 
         static float SHOOTING_COOLDOWN = 2.0f;
 
@@ -44,7 +45,7 @@ namespace TCGame
 
             // EJEMPLOS 1, 2 y 10
             TransformComponent transformComponent = actor.AddComponent<TransformComponent>();
-            transformComponent.Transform.Position = new Vector2f(500.0f, 300.0f);
+            transformComponent.Transform.Position = TecnoCampusEngine.Get.ViewportSize / 2;
             AnimatedSpriteComponent animatedSpriteComponent = actor.AddComponent<AnimatedSpriteComponent>("Data/Textures/ProtaIdleV2.png", 4u, 1u);
             animatedSpriteComponent.sprite.Scale *= MC_SCALE;
             animatedSpriteComponent.Center();
@@ -70,38 +71,37 @@ namespace TCGame
 
         private void CreateObjectSpawner()
         {
-            // Create Enemies
             // EJEMPLO 8
 
             // Create a spawner
             Actor actor = new Actor("Spawner");
-            ActorSpawnerComponent<ActorPrefab> spawner = actor.AddComponent(new ActorSpawnerComponent<ActorPrefab>());
-            spawner.m_MaxPosition = TecnoCampusEngine.Get.ViewportSize;
-            spawner.m_MinPosition = new Vector2f(0.0f, 0.0f);
+            ActorSpawnerComponent<ActorPrefab> spawner = actor.AddComponent<ActorSpawnerComponent<ActorPrefab>>();
+
+            spawner.m_MaxPosition = TecnoCampusEngine.Get.ViewportSize - new Vector2f(ENEMY_SCALE, ENEMY_SCALE);
+            spawner.m_MinPosition = new Vector2f(ENEMY_SCALE, ENEMY_SCALE);
             spawner.m_MaxTime = 6.0f;
             spawner.m_MinTime = 3.0f;
+            spawner.Reset();
 
             List<ECollisionLayers> enemyLayers = new List<ECollisionLayers>();
             enemyLayers.Add(ECollisionLayers.Person);
 
-            // TODO Add Necessary components
+
             // EJEMPLOS 1, 2 y 10
-            ActorPrefab enemy1 = new ActorPrefab("enemy1");
-            AnimatedSpriteComponent _AnimatedComponent1 = enemy1.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo1.png", 22u, 4u);
-            _AnimatedComponent1.frameTime = 0.001f;
-            _AnimatedComponent1.sprite.Scale *= ENEMY_SCALE;
-            TransformComponent _TransformComponent1 = enemy1.AddComponent<TransformComponent>();
-            BoxCollisionComponent _BoxColComponent1 = enemy1.AddComponent<BoxCollisionComponent>(_AnimatedComponent1.GetGlobalBounds(), ECollisionLayers.Enemy);
 
-            ActorPrefab enemy2 = new ActorPrefab("enemy2");
-            AnimatedSpriteComponent _AnimatedComponent2 = enemy2.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo2.png", 18u, 5u);
-            _AnimatedComponent2.frameTime = 0.001f;
-            _AnimatedComponent2.sprite.Scale *= ENEMY_SCALE;
-            TransformComponent _TransformComponent2 = enemy2.AddComponent<TransformComponent>();
-            BoxCollisionComponent _BoxColComponent2 = enemy2.AddComponent<BoxCollisionComponent>(_AnimatedComponent2.GetGlobalBounds(), ECollisionLayers.Enemy);
-
-            spawner.AddActorPrefab(enemy1);
-            spawner.AddActorPrefab(enemy2);
+            // Create Enemies
+            int enemyNumber = 2;
+            for (int i = 1; i <= enemyNumber; i++){
+                ActorPrefab enemy = new ActorPrefab("Enemy" + i);
+                TransformComponent _TransformComponent = enemy.AddComponent<TransformComponent>();
+                AnimatedSpriteComponent _AnimatedSpriteComponent = enemy.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo" + i + ".png", 22u, 4u);
+                _AnimatedSpriteComponent.loop = false;
+                BoxCollisionComponent _BoxColComponent = enemy.AddComponent<BoxCollisionComponent>(_AnimatedSpriteComponent.GetGlobalBounds(), ECollisionLayers.Enemy);
+                TimerComponent timerComponent = enemy.AddComponent<TimerComponent>(_AnimatedSpriteComponent.animationTime);
+                timerComponent.DieOnTime = true;
+                spawner.AddActorPrefab(enemy);
+            }
+            
             // Add the actor to the scene
             TecnoCampusEngine.Get.Scene.AddActor(actor);
         }

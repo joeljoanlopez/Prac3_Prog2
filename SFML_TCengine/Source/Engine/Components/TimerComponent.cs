@@ -13,6 +13,8 @@ namespace TCGame
         private bool m_Loop = false;
         private bool m_HasFinished = false;
 
+        private bool dieOnTime = false;
+
 
         public Action OnTime;
 
@@ -26,6 +28,12 @@ namespace TCGame
         {
             get => m_Loop;
             set => m_Loop = value;
+        }
+
+        public bool DieOnTime
+        {
+            get => dieOnTime;
+            set => dieOnTime = value;
         }
 
 
@@ -43,13 +51,13 @@ namespace TCGame
         {
             base.Update(_dt);
 
-            if( !m_HasFinished )
+            if (!m_HasFinished)
             {
                 m_CurrentTime += _dt;
 
-                if( m_CurrentTime >= m_Duration)
+                if (m_CurrentTime >= m_Duration)
                 {
-                    if( OnTime != null )
+                    if (OnTime != null)
                     {
                         OnTime();
                     }
@@ -63,6 +71,10 @@ namespace TCGame
                         m_HasFinished = true;
                     }
                 }
+            }
+            else if (dieOnTime)
+            {
+                Owner.Destroy();
             }
         }
 

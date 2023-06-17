@@ -40,6 +40,12 @@ namespace TCEngine
             return component;
         }
 
+        public void AddComponent<T>(T i_component) where T : BaseComponent
+        {
+            Debug.Assert(GetComponent<T>() == null, "This prebab (name:" + m_PrefabName + ") already has a component of type " + typeof(T).ToString());
+            m_Components.Add(i_component);
+        }
+
         public T GetComponent<T>() where T : BaseComponent
         {
             return m_Components.Find(component => component is T) as T;
