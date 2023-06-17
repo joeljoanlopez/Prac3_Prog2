@@ -35,6 +35,7 @@ namespace TCGame
             Actor _Background = new Actor("Background");
             Texture _mcTexture = new Texture("Data/Textures/Fondo.jpg");
             SpriteComponent _SpriteComponent = _Background.AddComponent<SpriteComponent>(_mcTexture);
+            _SpriteComponent.m_RenderLayer = RenderComponent.ERenderLayer.Background;
             _SpriteComponent.Sprite.Scale *= 1.5f;
             TecnoCampusEngine.Get.Scene.AddActor(_Background);
         }
@@ -53,7 +54,6 @@ namespace TCGame
             AnimationFSMComponent animationFSMComponent = actor.AddComponent<AnimationFSMComponent>(MC_SCALE);
             BoxCollisionComponent boxCollisionComponent = actor.AddComponent<BoxCollisionComponent>(animatedSpriteComponent.GetGlobalBounds(), ECollisionLayers.Player);
 
-
             List<ECollisionLayers> enemyLayers = new List<ECollisionLayers>();
             enemyLayers.Add(ECollisionLayers.Enemy);
 
@@ -64,8 +64,6 @@ namespace TCGame
             _cannonComponent.AutomaticFire = true;
             _cannonComponent.BulletTextureName = "Data/Textures/Bullet.png";
             _cannonComponent.FireRate = 1.5f;
-
-
 
             TecnoCampusEngine.Get.Scene.AddActor(actor);
         }
@@ -87,30 +85,28 @@ namespace TCGame
             List<ECollisionLayers> enemyLayers = new List<ECollisionLayers>();
             enemyLayers.Add(ECollisionLayers.Person);
 
-
             // EJEMPLOS 1, 2 y 10
 
             // Create Enemies
             int enemyNumber = 2;
-
-            for (int i = 1; i <= enemyNumber; i++){
+            for (int i = 1; i <= enemyNumber; i++)
+            {
                 ActorPrefab enemy = new ActorPrefab("Enemy" + i);
-                TransformComponent _TransformComponent = enemy.AddComponent<TransformComponent>();
-            
                 AnimatedSpriteComponent _AnimatedSpriteComponent = enemy.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo" + i + ".png", 22u, 4u);
                 _AnimatedSpriteComponent.loop = false;
-                BoxCollisionComponent _BoxColComponent = enemy.AddComponent<BoxCollisionComponent>(_AnimatedSpriteComponent.GetGlobalBounds(), ECollisionLayers.Enemy);
+                enemy.AddComponent<TransformComponent>();
+                enemy.AddComponent<BoxCollisionComponent>(_AnimatedSpriteComponent.GetGlobalBounds(), ECollisionLayers.Enemy);
 
                 CannonComponent _CannonComponent = enemy.AddComponent<CannonComponent>(enemyLayers, "Player");
                 _CannonComponent.AutomaticFire = true;
                 _CannonComponent.BulletTextureName = "Data/Textures/bulletPlaceHolder.png";
                 _CannonComponent.FireRate = 3f;
-                
+
                 TimerComponent timerComponent = enemy.AddComponent<TimerComponent>(_AnimatedSpriteComponent.animationTime);
                 timerComponent.DieOnTime = true;
                 spawner.AddActorPrefab(enemy);
             }
-            
+
             // Add the actor to the scene
             TecnoCampusEngine.Get.Scene.AddActor(actor);
         }
