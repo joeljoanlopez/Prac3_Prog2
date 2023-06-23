@@ -20,6 +20,7 @@ namespace TCGame
             CreateMainCharacter();
             CreateObjectSpawner();
             CreateHUD();
+            StartMusic();
         }
 
         public void DeInit()
@@ -130,6 +131,11 @@ namespace TCGame
             TecnoCampusEngine.Get.Scene.AddActor(actor);
 
             //////////////////////////////////////
+        }
+        private void StartMusic()
+        {
+            SoundManager _musica = new SoundManager();
+            _musica.PlaySound("Data/Sounds/Combate.wav");
         }
     }
 }

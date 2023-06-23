@@ -1,5 +1,6 @@
 ﻿using SFML.Audio;
 using System.Collections.Generic;
+using System.Media;
 
 namespace TCEngine
 {
@@ -21,6 +22,15 @@ namespace TCEngine
             sound.Volume = _volume;
             sound.Play();
             m_Sounds.Add(sound);
+        }
+        public void PlayMusic (string _musicName, float _volume = 100f)
+        {
+                SoundBuffer buffer = new SoundBuffer(_musicName);
+                Sound music = new Sound(buffer);
+                music.Volume = _volume;
+                music.Play();
+                m_Sounds.Add(music);
+           
         }
     }
 }
