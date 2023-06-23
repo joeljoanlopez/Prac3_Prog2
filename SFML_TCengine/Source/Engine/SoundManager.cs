@@ -15,10 +15,11 @@ namespace TCEngine
             m_Sounds.RemoveAll(soundsToRemove.Contains);
         }
 
-        public void PlaySound(string _soundName, float _volume = 100.0f)
+        public void PlaySound(string _soundName, float _volume = 100.0f, bool loop)
         {
             SoundBuffer buffer = new SoundBuffer(_soundName);
             Sound sound = new Sound(buffer);
+            sound.Loop = loop;
             sound.Volume = _volume;
             sound.Play();
             m_Sounds.Add(sound);
