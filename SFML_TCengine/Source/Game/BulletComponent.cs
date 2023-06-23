@@ -34,7 +34,7 @@ namespace TCGame
 
         public override void Update(float _dt)
         {
-            base.Update(_dt);
+            SoundManager _hitsound = new SoundManager();
 
             List<BoxCollisionComponent> collisionLayerComponents = TecnoCampusEngine.Get.Scene.GetAllComponents<BoxCollisionComponent>();
             foreach (BoxCollisionComponent collisionLayerComponent in collisionLayerComponents)
@@ -45,6 +45,7 @@ namespace TCGame
                     if (IsActorInRange(collisionLayerComponent.Owner))
                     {
                         Owner.Destroy();
+                        _hitsound.PlaySound("Data/Sounds/Hit.wav");
                         collisionLayerComponent.Owner.Destroy();
 
                         HUDComponent hudComponent = TecnoCampusEngine.Get.Scene.GetFirstComponent<HUDComponent>();
