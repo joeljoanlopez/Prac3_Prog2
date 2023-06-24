@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Security.Cryptography;
+using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using SFML.Graphics;
@@ -94,31 +95,32 @@ namespace TCGame
             int enemyNumber = 2;
             for (int i = 1; i <= enemyNumber; i++)
             {
-                
                 ActorPrefab enemy = new ActorPrefab("Enemy" + i);
-                AnimatedSpriteComponent _AnimatedSpriteComponent = enemy.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo" + i + ".png", 22u, 4u);
+
+                AnimatedSpriteComponent _AnimatedSpriteComponent = new AnimatedSpriteComponent("Data/Textures/Topo" + i + ".png", 22u, 4u);
                 _AnimatedSpriteComponent.loop = false;
+                enemy.AddComponent(_AnimatedSpriteComponent);
+
                 enemy.AddComponent<TransformComponent>();
                 enemy.AddComponent<BoxCollisionComponent>(_AnimatedSpriteComponent.GetGlobalBounds(), ECollisionLayers.Enemy);
 
-                CannonComponent _CannonComponent = enemy.AddComponent<CannonComponent>(enemyLayers, "Player");
-
+                Random rand = new Random();
+                Vector2f _EnemyCannonDirection = new Vector2f(rand.Next(-10, 10), rand.Next(-10, 10));
+                CannonComponent _CannonComponent = new CannonComponent(enemyLayers, _EnemyCannonDirection);
                 _CannonComponent.AutomaticFire = true;
                 _CannonComponent.BulletTextureName = "Data/Textures/bulletPlaceHolder.png";
                 _CannonComponent.FireRate = 3f;
+                enemy.AddComponent(_CannonComponent);
 
-                TimerComponent timerComponent = enemy.AddComponent<TimerComponent>(_AnimatedSpriteComponent.animationTime);
-                timerComponent.DieOnTime = true;
+                TimerComponent _timerComponent = new TimerComponent(_AnimatedSpriteComponent.animationTime);
+                _timerComponent.DieOnTime = true;
+                enemy.AddComponent(_timerComponent);
+
                 spawner.AddActorPrefab(enemy);
             }
 
             // Add the actor to the scene
             TecnoCampusEngine.Get.Scene.AddActor(actor);
-        }
-
-        private bool FindPlayer(Actor obj)
-        {
-            return obj.Name == "Flamenco Rabbit";
         }
 
         private void CreateHUD()

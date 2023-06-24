@@ -208,6 +208,7 @@ namespace TCGame
                 Debug.Assert(transformComponent != null);
                 _targetPos = transformComponent.Transform.Position;
             }
+
             else
                 _targetPos = _MousePosition;
 
