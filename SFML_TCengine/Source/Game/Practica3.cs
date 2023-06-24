@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using SFML.Graphics;
 using SFML.System;
 using TCEngine;
+using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace TCGame
 {
@@ -92,6 +94,7 @@ namespace TCGame
             int enemyNumber = 2;
             for (int i = 1; i <= enemyNumber; i++)
             {
+                
                 ActorPrefab enemy = new ActorPrefab("Enemy" + i);
                 AnimatedSpriteComponent _AnimatedSpriteComponent = enemy.AddComponent<AnimatedSpriteComponent>("Data/Textures/Topo" + i + ".png", 22u, 4u);
                 _AnimatedSpriteComponent.loop = false;
@@ -99,6 +102,7 @@ namespace TCGame
                 enemy.AddComponent<BoxCollisionComponent>(_AnimatedSpriteComponent.GetGlobalBounds(), ECollisionLayers.Enemy);
 
                 CannonComponent _CannonComponent = enemy.AddComponent<CannonComponent>(enemyLayers, "Player");
+
                 _CannonComponent.AutomaticFire = true;
                 _CannonComponent.BulletTextureName = "Data/Textures/bulletPlaceHolder.png";
                 _CannonComponent.FireRate = 3f;
