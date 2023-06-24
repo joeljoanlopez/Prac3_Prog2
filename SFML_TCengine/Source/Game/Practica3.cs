@@ -20,7 +20,7 @@ namespace TCGame
             CreateMainCharacter();
             CreateObjectSpawner();
             CreateHUD();
-            StartMusic(false);
+            StartMusic();
         }
 
         public void DeInit()
@@ -132,18 +132,11 @@ namespace TCGame
 
             //////////////////////////////////////
         }
-        private void StartMusic(bool gameover)
+        private void StartMusic()
         {
-            if (!gameover)
-            {
                 SoundManager _musica = new SoundManager();
                 _musica.PlayMusic("Data/Sounds/Combate.wav", true);
-            }
-            else if (gameover)
-            {
-                SoundManager _musica = new SoundManager();
-                _musica.PlayMusic("Data/Sounds/GameOver.wav", true);
-            }
+
         }
     }
 }
