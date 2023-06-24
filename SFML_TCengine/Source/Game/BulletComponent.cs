@@ -45,7 +45,7 @@ namespace TCGame
                     if (IsActorInRange(collisionLayerComponent.Owner))
                     {
                         Owner.Destroy();
-                        _hitsound.PlaySound("Data/Sounds/Hit.wav");
+                        _hitsound.PlaySound("Data/Sounds/Hit.wav", false);
                         collisionLayerComponent.Owner.Destroy();
 
                         HUDComponent hudComponent = TecnoCampusEngine.Get.Scene.GetFirstComponent<HUDComponent>();

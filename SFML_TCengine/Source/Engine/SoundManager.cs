@@ -1,6 +1,7 @@
 ﻿using SFML.Audio;
 using System.Collections.Generic;
 using System.Media;
+using System.Threading;
 
 namespace TCEngine
 {
@@ -14,24 +15,47 @@ namespace TCEngine
             soundsToRemove.ForEach(x => x.Dispose());
             m_Sounds.RemoveAll(soundsToRemove.Contains);
         }
+            
+        public void PlaySound(string _soundName, bool loop, float _volume = 100.0f)
+        {
+            Thread soundThread = new Thread(() =>
+            {
+                SoundBuffer buffer = new SoundBuffer(_soundName);
+                Sound sound = new Sound(buffer);
+                sound.Loop = loop;
+                sound.Volume = _volume;
+                sound.Play();
 
-        public void PlaySound(string _soundName, float _volume = 100.0f, bool loop)
-        {
-            SoundBuffer buffer = new SoundBuffer(_soundName);
-            Sound sound = new Sound(buffer);
-            sound.Loop = loop;
-            sound.Volume = _volume;
-            sound.Play();
-            m_Sounds.Add(sound);
+                while (sound.Status == SoundStatus.Playing)
+                {
+
+                }
+
+                sound.Dispose();
+            });
+
+            soundThread.Start();
         }
-        public void PlayMusic (string _musicName, float _volume = 100f)
+        public void PlayMusic (string _musicName, bool loop, float _volume = 100f)
         {
+            Thread musicThread = new Thread(() =>
+            {
                 SoundBuffer buffer = new SoundBuffer(_musicName);
                 Sound music = new Sound(buffer);
+                music.Loop = loop;
                 music.Volume = _volume;
                 music.Play();
-                m_Sounds.Add(music);
-           
+
+                while (music.Status == SoundStatus.Playing)
+                {
+                    // Espera activa hasta que se detenga la música
+                }
+
+                music.Dispose();
+            });
+
+            musicThread.Start();
         }
     }
 }
+    

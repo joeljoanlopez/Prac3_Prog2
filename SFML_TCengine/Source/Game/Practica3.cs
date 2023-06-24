@@ -135,7 +135,7 @@ namespace TCGame
         private void StartMusic()
         {
             SoundManager _musica = new SoundManager();
-            _musica.PlaySound("Data/Sounds/Combate.wav");
+            _musica.PlayMusic("Data/Sounds/Combate.wav", true);
         }
     }
 }

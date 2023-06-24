@@ -165,7 +165,7 @@ namespace TCGame
                 Debug.Assert(transformComponent != null);
                 GetCannonDirection(transformComponent.Transform.Position);
                 m_CannonDirection = Normalize(m_CannonDirection);
-                _shootingSound.PlaySound("Data/Sounds/Shoot.wav");
+                _shootingSound.PlaySound("Data/Sounds/Shoot.wav", false);
 
                 for (int i = 0; i < m_BulletsPerShot; ++i)
                 {
